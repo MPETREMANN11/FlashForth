@@ -1,0 +1,67 @@
+\ *********************************************************************
+\ ARDUINO pins definitions   
+\   Filename:       pinsDefinitions.txt
+\   author:         Marc PETREMANN
+\   Date:           04-june-2020
+\   MCU:            FlashForth Arduino all models
+\   GNU General Public License
+\ *********************************************************************
+
+\ Use:
+\ PORTD %10000000 defPIN: PD7  ( define portD pin #7)
+: defPIN: ( PORTx mask --- <word> | <word> --- mask port)
+    create
+        c, c,           \ compile PORT and pin mask
+    does>
+        dup c@          \ push pin mask
+        swap 1+ c@      \ push PORT
+  ;
+
+\ Turn a pin on, dont change others
+: high ( pinmask portadr -- )
+    mset
+  ;
+
+\ Turn a pin off, dont change others
+: low ( pinmask portadr -- )
+    mclr
+  ;
+
+
+\ Only for PORTx bits 
+\ address of DDRx is one less than address of PORTx
+
+\ Set DDRx so its corresponding pin is output.
+: output ( pinmask portadr -- )
+    1- high
+  ;
+
+\ Set DDRx so its corresponding pin is input.
+: input  ( pinmask portadr -- )   
+    1- low
+  ;
+
+\ read the pins masked as input
+: pin@  ( pinmask portaddr -- fl )
+    2- mtst \ select PINx register as input
+    if      true
+    else    false   then
+  ;
+
+
+-testLED
+marker -testLED
+
+\ tests
+\ PORTB
+37 constant PORTB	\ Port B Data Register
+PORTB %10000000 defPIN: LED
+: init.ports ( ---)
+    LED output
+  ;
+
+init.ports
+LED high
+500 ms
+LED low
+
