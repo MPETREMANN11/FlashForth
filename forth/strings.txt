@@ -1,6 +1,6 @@
 \ *********************************************************************
 \ STRINGS management for FlashForth
-\    Filename:      reyax.txt
+\    Filename:      strings.txt
 \    Date:          12/10/2020
 \    Updated:       12/10/2020
 \    File Version:  1.0
