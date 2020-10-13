@@ -1,0 +1,87 @@
+\ *********************************************************************
+\ STRINGS management for FlashForth
+\    Filename:      reyax.txt
+\    Date:          12/10/2020
+\    Updated:       12/10/2020
+\    File Version:  1.0
+\    MCU:           ARDUINO all models
+\    Copyright:     Marc PETREMANN
+\    Author:        Marc PETREMANN
+\    GNU General Public License
+\ *********************************************************************
+
+-strings
+marker -strings
+
+\ compare two strings
+\ n = 0 if strings are equals | otherwise n <> 0
+: compare ( str1 str2 --- n)
+    drop swap >r
+    begin
+        r> 1- >r
+        r@
+    while
+        over r@ + c@  
+        over r@ + c@
+       <>
+        if
+            2drop 
+            1 
+            exit
+        then
+    repeat
+    r> drop
+    2drop
+    0
+  ;
+
+
+: $= ( addr1 len1 addr2 len2 --- fl)
+    compare
+    0 =
+    if      true
+    else    false   then
+  ;
+
+\ define a strvar
+: string  ( n --- names_strvar)
+    create
+        dup
+        c,      \ n is maxlength
+        0 c,    \ 0 is real length
+        allot
+    does>
+        2 +
+        dup 1 - c@
+  ;
+
+\ store str into strvar
+: $!  ( str strvar ---)
+    drop 1-
+    dup 1- c@
+    rot
+    min
+    swap place
+  ;
+
+: str=
+
+\ *** Example: **********
+: constStr
+    s" this is constant string" ;
+
+\ create variable varStr
+32 string varStr
+
+\ copy constStr into varStr
+constStr varStr $!
+
+varStr type \ display: this is constant string
+
+: tst2 ( --- fl)
+    s" +RCB"
+    s" +RCB"    $=
+  ;
+
+tst2 \ leave true
+
