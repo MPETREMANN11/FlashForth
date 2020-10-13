@@ -64,7 +64,7 @@ marker -strings
     swap place
   ;
 
-: str=
+
 
 \ *** Example: **********
 : constStr
