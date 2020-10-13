@@ -57,11 +57,11 @@ marker -strings
 
 \ store str into strvar
 : $!  ( str strvar ---)
-    drop 1-
-    dup 1- c@
-    rot
-    min
-    swap place
+    drop
+    dup 2- c@       \ get maxlength of strvar
+    rot min         \ keep min length
+    2dup swap 1- c! \ store real length
+    cmove           \ copy string
   ;
 
 
